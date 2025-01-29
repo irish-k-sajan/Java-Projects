@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.poc.poc.mapper.EmployeeMapper">
+    <resultMap id="EmployeeResultMap" type="Employee">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="role" property="role" jdbcType="VARCHAR"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, name, role
+    </sql>
+    
+    <select id="FindAllEmployee" resultMap="EmployeeResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM Employee
+    </select>
+    <select id="FindEmployeeById" resultMap="EmployeeResultMap" parameterType="Long">
+    SELECT * FROM Employee WHERE id=#{id}
+    </select>
+    <insert id="CreateEmployee" parameterType="Employee">
+        INSERT INTO Employee(name, role) VALUES(#{name}, #{role})
+    </insert>
+    
+    <update id="UpdateEmployee" parameterType="Employee">
+        UPDATE Employee SET
+        <if test="name != null">name = #{name},</if>
+        <if test="role != null">role = #{role}</if>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="DeleteEmployee" parameterType="Long">
+        DELETE FROM Employee
+        WHERE id = #{id}
+    </delete>
+</mapper>
